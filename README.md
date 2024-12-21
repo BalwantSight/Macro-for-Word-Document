@@ -1,1 +1,2 @@
-[![Vista previa del video](https://via.placeholder.com/600x300.png?text=Video+Preview)](video/Aplicación de Macro.mp4)
+[Ver el video](https://github.com/BalwantSight/Macro-for-Word-Document
+/raw/main/video/Aplicación de Macro.mp4)
