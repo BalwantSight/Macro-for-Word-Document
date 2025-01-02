@@ -1,0 +1,57 @@
+function palabrasNaranja() {
+  // Colores para resaltado
+  var colorVioleta = "#C933FF"; // Violeta Brillante
+  var colorNaranja = "#FF6600"; // Naranja Brillante
+
+  // Palabras a resaltar
+  var palabrasGenerales = ["vieja", "nuevo", "árbol", "pájaro", "planta"];
+  var palabrasPersonales = ["familia", "niño", "adulto", "anciano"];
+  var palabrasEspaciales = ["piso", "pared", "techo", "jardín", "parque"];
+  var palabrasNaturales = ["ave", "reptil", "bosque", "oscuro", "pez", "insecto"];
+  var palabrasObjetos = ["utensilio", "máquina", "espejo", "publicación", "documento"];
+  var palabrasPlurales = ["animales", "personas", "ciudades", "ropas", "alimentos", "bebidas"];
+
+  // Unir todas las palabras
+  var todasLasPalabras = [].concat(
+    palabrasGenerales,
+    palabrasPersonales,
+    palabrasEspaciales,
+    palabrasNaturales,
+    palabrasObjetos,
+    palabrasPlurales
+  );
+
+  // Obtener el documento activo
+  var doc = DocumentApp.getActiveDocument();
+  var body = doc.getBody();
+
+  // Resaltar palabras terminadas en "mente" con violeta
+  var text = body.getText();
+  var regexMente = /\b\w*mente\b/g;
+  var match;
+  while ((match = regexMente.exec(text)) !== null) {
+    var start = match.index;
+    var end = start + match[0].length;
+    var range = body.findText(match[0]);
+    if (range) {
+      var el = range.getElement();
+      var offset = range.getStartOffset();
+      el.setText(el.getText().replace(match[0], match[0]));
+      el.editAsText().setForegroundColor(offset, offset + match[0].length - 1, colorVioleta);
+    }
+  }
+
+  // Resaltar palabras específicas con naranja
+  todasLasPalabras.forEach(function (palabra) {
+    var search = body.findText("\\b" + palabra + "\\b");
+    while (search) {
+      var el = search.getElement();
+      var startOffset = search.getStartOffset();
+      var endOffset = search.getEndOffsetInclusive();
+      el.editAsText().setForegroundColor(startOffset, endOffset, colorNaranja);
+      search = body.findText("\\b" + palabra + "\\b", search);
+    }
+  });
+
+  DocumentApp.getUi().alert("Resaltado completado.");
+}
